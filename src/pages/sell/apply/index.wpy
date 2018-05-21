@@ -1,0 +1,154 @@
+<template>
+    <view class="sell-apply">
+    <view class="sell-apply-title color4">店铺认证</view>
+    <view class="sell-apply-from">
+        <view class="sell-apply-from-item">
+            <text class="sell-apply-from-ite-text color4">姓名</text>
+            <input class="sell-apply-from-item-ipt bgColorF6 color4 borderF6" placeholder="请输入你的名字" placeholder-class="colorA1" @input="changeName"/>
+        </view>
+        <view class="sell-apply-from-item">
+            <text class="sell-apply-from-ite-text color4">手机</text>
+            <input class="sell-apply-from-item-ipt bgColorF6 color4 borderF6" type="number" placeholder="请输入手机号码" placeholder-class="colorA1" @input="changePhone"/>
+        </view>
+        <view class="sell-apply-from-item">
+            <text class="sell-apply-from-ite-text color4">门店</text>
+            <input class="sell-apply-from-item-ipt bgColorF6 color4 borderF6" placeholder="请输入你的门店名称" placeholder-class="colorA1" @input="changeStore"/>
+        </view>
+    </view>
+    <view class="sell-apply-footer" @tap="submitApply">提交</view>
+    <view class="ad_popError" wx:if="{{popErrorMsg}}">{{popErrorMsg}}</view>
+</view>
+
+</template>
+<style lang='less'>
+/* pages/sell/apply/index.wxss */
+.sell-apply {
+  height: 100%;
+  padding-top: 90rpx;
+}
+
+.sell-apply .sell-apply-title {
+  text-align: center;
+  font-family: PingFangSC-Medium;
+  font-size: 40rpx;
+  margin-bottom: 40rpx;
+}
+
+.sell-apply .sell-apply-from {
+  padding: 0 50rpx;
+  margin-bottom: 80rpx;
+}
+
+.sell-apply .sell-apply-from .sell-apply-from-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.sell-apply .sell-apply-from .sell-apply-from-item .sell-apply-from-ite-text {
+  width: 56rpx;
+  text-align: right;
+  margin-right: 20rpx;
+  font-size: 28rpx;
+}
+.sell-apply .sell-apply-from .sell-apply-from-item .sell-apply-from-item-ipt {
+  flex: 1;
+  padding: 25rpx 56rpx 25rpx 30rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}
+.sell-apply .sell-apply-footer {
+  width: 290rpx;
+  height: 100rpx;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 100rpx;
+  font-family: PingFangSC-Medium;
+  font-size: 34rpx;
+  color: #ffffff;
+  background-image: linear-gradient(
+    -90deg,
+    #ff5b41 0%,
+    #ff773e 45%,
+    #ff5b41 100%
+  );
+  box-shadow: 0 6rpx 11rpx 0 rgba(255, 114, 62, 0.39),
+    inset 0 8rpx 3rpx 0 rgba(255, 209, 129, 0.32);
+  border-radius: 100rpx;
+}
+</style>
+<script>
+import wepy from 'wepy';
+import SELL from '../../../utils/sellFetch.js';
+import AuthProvider from '../../../utils/AuthProvider.js';
+import utils from '../../../utils/util.js';
+export default class Apply extends wepy.page {
+  config = {
+    navigationBarTitleText: '店铺认证'
+  };
+  data = {
+    name: null,
+    phone: null,
+    store: null,
+    popErrorMsg: null, //错误提示信息
+    stop: true //阻止机制
+  };
+  onShow() {
+    this.name = null;
+    this.phone = null;
+    this.store = null;
+    this.popErrorMsg = null;
+    this.stop = true;
+  }
+  methods = {
+    //输入姓名
+    changeName: e => {
+      'use strict';
+      this.name = e.detail.value;
+      this.$apply();
+    },
+    //  输入手机号码
+    changePhone: e => {
+      this.phone = e.detail.value;
+      this.$apply();
+    },
+    // 输入店铺名称
+    changeStore: e => {
+      'use strict';
+      this.store = e.detail.value;
+      this.$apply();
+    },
+    //提交申请
+    submitApply: () => {
+      let myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      ('use strict');
+      if (!this.name || !this.phone || !this.store) {
+        utils.ErrorTips(this, '请填写完整数据！');
+      } else if (!myreg.test(this.phone)) {
+        utils.ErrorTips(this, '请确认手机号码!');
+      } else {
+        AuthProvider.onLogin('sell', this.phone, res => {
+          console.log(res);
+          if (res.resultCode === '100') {
+            utils.pageGo(1, null, 1);
+          }
+          console.log(res, '卖家登录操作');
+          if (res.code === 404) {
+            let data = {
+              phone: this.phone,
+              shopName: this.store,
+              username: this.name
+            };
+            SELL.apply(data, res => {
+              console.log(res, '申请入驻');
+              if (res.data.resultCode === '100') {
+                utils.ErrorTips(this, '申请成功，待审核');
+                utils.pageGo(1, null, 1);
+              }
+            });
+          }
+        });
+      }
+    }
+  };
+}
+</script>

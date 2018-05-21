@@ -1,0 +1,718 @@
+<style>
+/* pages/buyer/buyer.wxss */
+
+.buyer-main {
+  height: 100%;
+  width: 100%;
+}
+
+.buyer-main .imgBox {
+  width: 100%;
+  height: 654rpx;
+  position: relative;
+}
+
+.buyer-main .imgBox .goodImg {
+  width: 100%;
+  height: 100%;
+}
+
+.buyer-main .imgBox .icon-secKill {
+  position: absolute;
+  left: 10rpx;
+  top: 20rpx;
+  width: 202rpx;
+  height: 141rpx;
+}
+
+.buyer-main .detail {
+  width: 100%;
+  height: 96rpx;
+  display: flex;
+  background-image: linear-gradient(-120deg, #ff773e 0%, #ff4444 100%);
+  color: #ffffff;
+}
+
+.buyer-main .detail .price {
+  flex: auto;
+  width: 540rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.buyer-main .detail .price .flex-item {
+  flex: none;
+}
+
+.buyer-main .detail .count {
+  flex: none;
+  width: 210rpx;
+  height: 100%;
+  text-align: center;
+  background: #ff763e;
+  font-family: PingFangSC-Regular;
+  font-size: 26rpx;
+  color: #fff800;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.buyer-main .detail .count.inProgress {
+  width: 300rpx;
+}
+
+.buyer-main .detail .count .text {
+  flex: none;
+}
+
+.buyer-main .detail .count .progress {
+  width: 200rpx;
+  height: 24rpx;
+  line-height: 24rpx;
+  background: rgba(255, 249, 31, 0.4);
+  border-radius: 20px;
+  font-family: PingFangSC-Regular;
+  font-size: 16rpx;
+  color: #cf1818;
+  flex: none;
+  position: relative;
+}
+
+.buyer-main .goodInfo {
+  padding: 30rpx 32rpx;
+}
+
+.buyer-main .detail .count .progress .bar {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #fff91f;
+  border-radius: 20px;
+  width: 20rpx;
+}
+
+.buyer-main .goodInfo .goodName {
+  font-family: PingFangSC-Medium;
+  font-size: 36rpx;
+  color: #444444;
+}
+
+.buyer-main .goodInfo .address {
+  font-family: PingFangSC-Regular;
+  font-size: 30rpx;
+  color: #444444;
+  margin: 20rpx 0;
+}
+
+.buyer-main .goodInfo .address .icon-address {
+  width: 21rpx;
+  height: 27rpx;
+  margin-right: 13rpx;
+}
+
+.buyer-main .goodInfo .outline {
+  background: #f6f6f6;
+  font-family: PingFangSC-Regular;
+  font-size: 28rpx;
+  color: #a1a1a1;
+  padding: 20rpx;
+}
+
+.buyer-main .seckill-button {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  background-color: #29c56e;
+  border-radius: 0;
+  outline: none;
+  border: none;
+  font-family: PingFangSC-Medium;
+  font-size: 34rpx;
+  color: #ffffff;
+}
+
+.buyer-main .seckill-button::after {
+  border-radius: 0;
+  border: 0 none;
+}
+
+.buyer-main .seckill-button[disabled] {
+  background: #c0c0c0;
+}
+
+.buyer-main .seckill-button.inProgress {
+  background-image: linear-gradient(
+    -90deg,
+    #ff5b41 0%,
+    #ff773e 45%,
+    #ff5b41 100%
+  );
+}
+
+.buyer-main .seckill-button.bookTime {
+  display: flex;
+}
+
+.buyer-main .seckill-button.bookTime .timeLeft {
+  flex: auto;
+}
+
+.buyer-main .seckill-button.bookTime .notice {
+  flex: none;
+  width: 250rpx;
+  height: 100%;
+  background-image: linear-gradient(-90deg, #ff773e 0%, #ff5b41 100%);
+  font-family: PingFangSC-Medium;
+  font-size: 34rpx;
+  color: #ffffff;
+  text-indent: 60rpx;
+  position: relative;
+}
+
+.buyer-main .seckill-button.bookTime .notice .icon {
+  display: block;
+  content: '';
+  width: 48rpx;
+  height: 45rpx;
+  position: absolute;
+  left: 28rpx;
+  top: 28rpx;
+}
+
+.buyer-main .getPhone {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0);
+}
+
+.buyer-main .getPhone button {
+  /* width: 580rpx;
+    height: 600rpx; */
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.buyer-main .getPhone .joinButton {
+  width: 580rpx;
+  height: 600rpx;
+  display: block;
+}
+
+.buyer-main .bind-phone-module {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+
+.buyer-main .bind-phone-main {
+  background: #ffffff;
+  box-shadow: 0 4rpx 28rpx 0 rgba(0, 0, 0, 0.1);
+  border-radius: 10rpx;
+  width: 500rpx;
+  height: 476rpx;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 36%;
+  margin: auto;
+}
+
+.buyer-main .bind-phone-main .bind-phone-close {
+  width: 24rpx;
+  height: 24rpx;
+  position: absolute;
+  right: 20rpx;
+  top: 20rpx;
+}
+
+.buyer-main .bind-phone-main .bind-phone-title {
+  padding: 50rpx 0 20rpx 0;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+  font-size: 28rpx;
+}
+
+.buyer-main .bind-phone-main .bind-phone-content {
+  padding: 0 60rpx;
+  margin-bottom: 52rpx;
+}
+
+.buyer-main .bind-phone-main .bind-phone-content .bind-phone-content-item {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  padding: 24rpx 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.buyer-main
+  .bind-phone-main
+  .bind-phone-content
+  .bind-phone-content-item
+  .item-ipt {
+  flex: 1;
+}
+
+.buyer-main
+  .bind-phone-main
+  .bind-phone-content
+  .bind-phone-content-item
+  .phoneText {
+  border-left: 1px solid #e8e8e8;
+  padding-left: 40rpx;
+  width: 140rpx;
+}
+
+.buyer-main .bind-phone-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.buyer-main .bind-phone-footer .bind-phone-footer-btn {
+  width: 300rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  border-radius: 100rpx;
+  font-family: PingFangSC-Regular;
+  font-size: 30rpx;
+  color: #ffffff;
+}
+
+.buyer-main .ad_popError {
+  top: 42%;
+}
+</style>
+<template>
+    <!--pages/buyer/buyer.wxml-->
+<view class="buyer-main">
+    <scroll-view scroll-y style="height: calc(100% - 100rpx);">
+        <view class="imgBox">
+            <view class="goodImg" style="background: url({{goodData.coverPhoto}}) no-repeat;background-size: cover;background-position: center"></view>
+            <image class="icon-secKill" src="../../../images/secClock.png"/>
+        </view>
+        <view class="detail">
+            <view class="price">
+                <text class="flex-item" style="font-family: PingFangSC-Semibold;font-size: 74rpx;margin: 0 12rpx 0 24rpx;">
+                    <text style="font-size: 50rpx;">￥</text>{{goodData.showPrice}}
+                </text>
+                <text class="flex-item" style="font-size: 26rpx;color: #FFFFFF;">
+                    <text style="opacity: 0.7;font-family: PingFangSC-Regular;text-decoration: line-through"
+                        wx:if="{{goodData.marketPrice&&goodData.marketPrice>0}}">
+                        <text>￥</text>{{goodData.marketPrice}}
+                    </text>
+                    <text style="font-family: PingFangSC-Semibold;">秒杀价</text>
+                </text>
+            </view>
+            <view class="count inProgress" wx:if="{{secKillFlag}}">
+                <text>还剩 {{timeLeftBuy}}</text>
+                <view class="progress">
+                    <text style="position:relative;z-index:2;">已抢{{goodData.totalSaledQuantity}}/{{goodData.totalQuantity}}</text>
+                    <view class="bar" style="width: {{percent}}"></view>
+                </view>
+            </view>
+            <view class="count inProgress" wx:else>
+                <text>限量{{goodData.totalQuantity?goodData.totalQuantity:0}}件</text>
+            </view>
+        </view>
+        <view class="goodInfo">
+            <text class='goodName'>{{goodData.name}}</text>
+            <view class="address">
+                <image class="icon-address" src="../../../images/ic_location@3x.png"/>
+                <text>{{goodData.productWarehouse.bondedWarehouseName}}</text>
+            </view>
+            <view class="outline" wx:if="{{productDescription&&productDescription.type==2&&productDescription.description}}">
+                {{productDescription.description}}
+            </view>
+        </view>
+    </scroll-view>
+    <form @submit="formSubmit" report-submit="true">
+        <button class='seckill-button fininshed' disabled wx:if="{{status!=1 || expiredFlag}}">活动已结束</button>
+        <button class='seckill-button inProgress' wx:elif="{{secKillFlag&&repertory}}" @tap="submitPurchase"
+            formType="submit">马上抢</button>
+        <button class='seckill-button fininshed' disabled wx:elif="{{secKillFlag&&!repertory}}">已抢完</button>
+        <button class='seckill-button bookTime' wx:else formType="submit" @tap="bookGood">
+            <view class="timeLeft">距离开始还有 {{timeLeft}}</view>
+            <view class="notice">
+                <image class="icon" src='../../../images/ic_time.png'/>
+                抢购提醒
+            </view>
+        </button>
+    </form>
+    <view class="getPhone" wx:if="{{!hasUserInfo && canIUse}}">
+        <button open-type="getUserInfo" @getuserinfo="getUserInfo">
+        </button>
+    </view>
+    <view class="bind-phone-module" wx:if="{{phoneMS}}">
+        <view class="bind-phone-main">
+            <image class="bind-phone-close" @tap="closePhoneModule" src="/images/ic_close.png"
+            />
+            <view class="bind-phone-title">绑定手机号</view>
+            <view class="bind-phone-content">
+                <view class="bind-phone-content-item">
+                    <input @input="changePhone" maxlength="11" type="number" focus="{{true}}" placeholder="输入手机号码作为取货凭证"
+                        placeholder-class="colorA1" class="item-ipt color4" />
+                </view>
+                <view class="bind-phone-content-item">
+                    <input @input="changeCode" maxlength="6" type="number" placeholder="输入验证码" placeholder-class="colorA1"
+                        class="item-ipt color4" />
+                    <view @tap="getPhoneCode" class="{{phoneCodeState?'phoneText colorRed':'phoneText colorA1'}}">{{phoneText}}</view>
+                </view>
+            </view>
+            <view class="bind-phone-footer">
+                <view class="{{phoneBtnState?'bind-phone-footer-btn bgColorS':'bind-phone-footer-btn bgColorC0'}}"
+                    @tap="bindPhone">绑定手机号</view>
+            </view>
+        </view>
+    </view>
+    <view class="ad_popError" wx:if="{{popErrorMsg}}">{{popErrorMsg}}</view>
+</view>
+</template>
+<script>
+import wepy from 'wepy';
+import SELL from '../../../utils/sellFetch.js';
+import AuthProvider from '../../../utils/AuthProvider.js';
+import utils from '../../../utils/util.js';
+import API from '../../../utils/api.js';
+import wxRequest from '../../../utils/wxRequest.js';
+export default class buySecKill extends wepy.page {
+  data = {
+    userInfo: null,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'), //判断是否支持button微信授权
+    goodData: {},
+    status: 1,
+    productDescription: {},
+    timeLeft: '00:00:00',
+    timeLeftBuy: '00:00:00',
+    secKillFlag: false,
+    repertory: true,
+    expiredFlag: false,
+    effectiveDate: 0,
+    expiredDate: 0,
+    hasUserInfo: false,
+    goodId: '',
+    paymentFlag: false,
+    stop: true, //阻止机制
+    popErrorMsg: '',
+    phoneNum: '',
+    phoneCode: '',
+    phoneText: '获取验证码',
+    phoneCodeState: false,
+    phoneNumState: false,
+    phoneBtnState: false,
+    phoneMS: false
+  };
+  onLoad(options) {
+    let unionid = wx.getStorageSync('unionid');
+    if (unionid) {
+      AuthProvider.onLogin('buy', null, res => {
+        console.log('买家鉴权');
+      });
+    }
+    this.$parent.getGlobalDatas(this.canIUse, res => {
+      'use strict';
+      this.hasUserInfo = res.hasUserInfo;
+      this.userInfo = res.userInfo;
+      this.$apply();
+    });
+    this.goodId = options.scene;
+    this.requestGoodInfo();
+  }
+  // 获取商品详情
+  requestGoodInfo() {
+    let url = API.getGoodInfo;
+    let goodId = this.goodId;
+    wxRequest
+      .fetch(API.getGoodInfo + '?goodId=' + goodId, null, null, 'GET')
+      .then(res => {
+        console.log(res);
+        this.goodData = res.data.resultContent;
+        this.productDescription = res.data.resultContent.productDescription.find(
+          item => item.type == 2
+        );
+        this.percent =
+          12 +
+          88 *
+            (res.data.resultContent.totalSaledQuantity /
+              res.data.resultContent.totalQuantity) +
+          '%';
+        this.effectiveDate = res.data.resultContent.effectiveDate;
+        this.expiredDate = res.data.resultContent.expiredDat;
+        this.status = res.data.resultContent.status;
+        this.repertory = !(
+          res.data.resultContent.totalSaledQuantity ==
+          res.data.resultContent.totalQuantity
+        );
+        this.$apply();
+        this.countdown();
+        this.countdownBuy();
+        this.requestSkuInfo(res.data.resultContent.id);
+      });
+  }
+  //获取商品sku信息
+  requestSkuInfo(goodId) {
+    let url = API.getSkuInfo + goodId + '/sku';
+    wxRequest.fetch(url, null, null, 'GET').then(res => {
+      console.log(res, '获取商品sku信息');
+      this.skuId = res.data.resultContent[0].id;
+      this.$apply();
+    });
+  }
+  // 预计抢购倒计时
+  countdown() {
+    let current = new Date().getTime();
+    // console.log(current)
+    let goodData = this.goodData;
+    let effectiveDate = this.effectiveDate;
+    console.log('--------');
+    console.log(current);
+    console.log(effectiveDate);
+    if (current < effectiveDate) {
+      this.timeLeft = utils.formatTime(
+        Math.floor((effectiveDate - current) / 1000)
+      );
+      this.$apply();
+      setTimeout(this.countdown, 500);
+    } else {
+      console.log('###########');
+      this.secKillFlag = true;
+      this.$apply();
+    }
+  }
+  // 抢购倒计时时间
+  countdownBuy() {
+    let current = new Date().getTime();
+    let { goodData, expiredDate } = this.data;
+    if (current < expiredDate) {
+      this.timeLeftBuy = utils.formatTime(
+        Math.floor((expiredDate - current) / 1000)
+      );
+      this.$apply();
+      setTimeout(this.countdownBuy, 500);
+    } else {
+      this.expiredFlag = true;
+      this.$apply();
+    }
+  }
+  subMain() {
+    'use strict';
+    let self = this;
+    if (this.paymentFlag) return;
+    this.paymentFlag = true;
+    let params = {
+      phone: wx.getStorageSync('phoneNum'),
+      proPayment: {
+        appid: API.APP_ID,
+        body: '小程序 商品秒杀',
+        openId: wx.getStorageSync('openid')
+      },
+      quantity: 1,
+      skuId: this.skuId
+    };
+    AuthProvider.getAccessToken()
+      .then(token => {
+        return wxRequest.fetch(
+          API.submitOrder,
+          { type: 'bearer', value: token },
+          params,
+          'POST'
+        );
+      })
+      .then(res => {
+        console.log(res, '提交商品购买');
+        if (res.data.resultCode == '100') {
+          if (res.data.resultContent) {
+            // 在线支付
+            wx.requestPayment({
+              timeStamp: res.data.resultContent.timeStamp,
+              nonceStr: res.data.resultContent.nonceStr,
+              package: res.data.resultContent.package,
+              signType: res.data.resultContent.signType,
+              paySign: res.data.resultContent.sign,
+              success: function(res) {
+                // 支付成功
+                utils.pageGo(
+                  '/pages/buyer/success/index?scene=' + self.goodId,
+                  2
+                );
+              },
+              fail: function(res) {
+                utils.ErrorTips(self, '秒杀失败');
+              },
+              complete: function() {
+                self.paymentFlag = false;
+                self.$apply();
+              }
+            });
+          } else {
+            // 到店支付
+            self.paymentFlag = false;
+            self.$apply();
+            utils.pageGo(
+              '/pages/buyer/success/index?scene=' + self.data.goodId,
+              2
+            );
+          }
+        } else {
+          utils.ErrorTips(self, '秒杀失败');
+          self.paymentFlag = false;
+          self.$apply();
+        }
+      });
+  }
+  methods = {
+    formSubmit: e => {
+      let params = {
+        appId: API.APP_ID,
+        formId: e.detail.formId,
+        openId: wx.getStorageSync('openid')
+      };
+      AuthProvider.getAccessToken().then(token => {
+        wx.request({
+          url: API.templateNews,
+          data: params,
+          method: 'POST',
+          header: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            Authorization: 'bearer ' + token //base64加密liz-youli-wx:secret
+          },
+          success: function(e) {
+            console.log('发送成功');
+          }
+        });
+      });
+    },
+    closePhoneModule: () => {
+      this.phoneMS = false;
+    },
+    // 订阅商品
+    bookGood: () => {
+      let self = this;
+      let goodId = this.goodId;
+      let goodData = this.goodData;
+      let params = {
+        goodId: goodData.id ? goodData.id : goodId,
+        openId: wx.getStorageSync('openid'),
+        type: 1
+      };
+      AuthProvider.getAccessToken()
+        .then(token => {
+          return wxRequest.fetch(
+            API.bookGood,
+            { type: 'bearer', value: token },
+            params,
+            'POST'
+          );
+        })
+        .then(res => {
+          console.log(res, '订阅提醒');
+          if (res.data.resultCode == '100') {
+            utils.ErrorTips(self, '预约成功');
+          }
+        });
+    },
+    submitPurchase: () => {
+      if (!this.hasUserInfo || !wx.getStorageSync('phoneNum')) {
+        this.phoneMS = true;
+      } else {
+        this.phoneMS = false;
+        this.subMain();
+      }
+    },
+    changePhone: e => {
+      let myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      if (myreg.test(e.detail.value)) {
+        this.phoneCodeState = true;
+        this.phoneNumState = true;
+        this.phoneNum = e.detail.value;
+        if (this.data.phoneCode.length === 6) {
+          this.phoneBtnState = true;
+        } else {
+          this.phoneBtnState = false;
+        }
+      } else {
+        this.phoneCodeState = false;
+        this.phoneNumState = false;
+        this.phoneBtnState = false;
+        this.phoneNum = e.detail.value;
+      }
+    },
+    //输入验证码：
+    changeCode: e => {
+      if (e.detail.value.length === 6 && this.phoneNumState) {
+        this.phoneBtnState = true;
+        this.phoneCode = e.detail.value;
+      } else {
+        this.phoneBtnState = false;
+        this.phoneCode = e.detail.value;
+      }
+    },
+    //获取phonecode
+    getPhoneCode: () => {
+      if (this.phoneCodeState) {
+        this.phoneCodeState = false;
+        utils.count_down(this, 60000);
+        wxRequest
+          .fetch(API.getPhoneCode + this.phoneNum, null, null, 'GET')
+          .then(res => {
+            'use strict';
+            if (res.data.resultCode === '100') {
+              // util.ErrorTips(this,'发送成功')
+            } else {
+              utils.ErrorTips(this, '发送失败');
+            }
+          })
+          .catch(req => {
+            'use strict';
+            this.phoneCodeState = true;
+            utils.ErrorTips(this, '发送失败');
+            this.$apply();
+          });
+      }
+    },
+    bindPhone: () => {
+      let dataParams = {
+        code: this.phoneCode,
+        phone: this.phoneNum,
+        templateCode: 'SHOP_OWNER_VCODE_MSG'
+      };
+      wxRequest.fetch(API.codeYAN, null, dataParams, 'POST').then(res => {
+        if (res.data.resultCode === '100') {
+          this.phoneMS = false;
+          this.$apply();
+          wx.setStorageSync('phoneNum', this.data.phoneNum);
+        } else {
+          utils.ErrorTips(this, '验证码输入有误');
+        }
+      });
+    },
+    getUserInfo: e => {
+      this.$parent.getUserInfo(e, 'buy', res => {
+        console.log(res);
+        this.hasUserInfo = res.hasUserInfo;
+        this.userInfo = res.userInfo;
+        this.phoneMS = true;
+        this.$apply();
+      });
+    }
+  };
+}
+</script>
+

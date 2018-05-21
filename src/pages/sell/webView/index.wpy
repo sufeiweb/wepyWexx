@@ -1,0 +1,21 @@
+<style>
+</style>
+<template>
+    <web-view src='{{url}}'></web-view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class WebView extends wepy.page {
+  onLoad(options) {
+    let urls =
+      'https://wx.gemii.cc/gemii/poster/index.html?id=' +
+      options.scene +
+      '&urlType=pro';
+    if (options.scene) {
+      this.url = urls;
+      this.$apply();
+    }
+  }
+}
+</script>
+

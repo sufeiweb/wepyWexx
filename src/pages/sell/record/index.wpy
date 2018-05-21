@@ -1,0 +1,198 @@
+<style>
+/* pages/sell/record/index.wxss */
+.sell-record {
+  height: 100%;
+}
+.sell-record .sell-record-header {
+  background: url('https://cloud.gemii.cc/lizcloud/fs/noauth/media/5aec00558c34ba0032ee9ca0')
+    no-repeat;
+  background-size: cover;
+  height: 347rpx;
+  position: relative;
+}
+.sell-record .sell-record-header .sell-record-header-content {
+  background: #ffffff;
+  box-shadow: 0 3rpx 15rpx 0 rgba(68, 68, 68, 0.09);
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  padding: 50rpx 30rpx;
+  width: 702rpx;
+  box-sizing: border-box;
+  font-size: 34rpx;
+  color: #444444;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -60rpx;
+}
+.sell-record
+  .sell-record-header
+  .sell-record-header-content
+  .sell-record-header-content-img {
+  width: 150rpx;
+  height: 150rpx;
+  margin-right: 20rpx;
+}
+.sell-record-header-content-text {
+  flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.sell-record-list {
+  height: calc(100% - 347rpx);
+  padding: 0 32rpx;
+  box-sizing: border-box;
+  font-size: 26rpx;
+}
+.sell-record-list .sell-record-list-title {
+  width: 100%;
+  height: 179rpx;
+  display: flex;
+  align-items: center;
+  padding-top: 110rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  border-bottom: 1px solid #e6e6e6;
+}
+.sell-record-list .sell-record-list-item text,
+.sell-record-list .sell-record-list-title text {
+  text-align: center;
+}
+.sell-record-list .sell-record-list-item text:nth-of-type(1),
+.sell-record-list .sell-record-list-title text:nth-of-type(1) {
+  width: 170rpx;
+}
+.sell-record-list .sell-record-list-item text:nth-of-type(2),
+.sell-record-list .sell-record-list-title text:nth-of-type(2) {
+  flex: 1;
+}
+.sell-record-list .sell-record-list-item text:nth-of-type(3),
+.sell-record-list .sell-record-list-title text:nth-of-type(3) {
+  width: 120rpx;
+}
+.sell-record-list-content {
+  height: calc(100% - 179rpx);
+}
+.sell-record-list .sell-record-list-item {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 0;
+  border-bottom: 1px solid #e6e6e6;
+}
+.sell-record-list .sell-record-list-item.kong {
+  border: none;
+}
+
+.sell-record-list-nolist {
+  padding-top: 219rpx;
+  text-align: center;
+}
+</style>
+<template>
+    <view class="sell-record">
+    <view class="sell-record-header">
+        <view class="sell-record-header-content">
+            <image class="sell-record-header-content-img" src="{{dataList.skuPic}}" />
+            <view class="sell-record-header-content-text">{{dataList.skuName}}</view>
+        </view>
+    </view>
+    <view class="sell-record-list color4" wx:if="{{!dataList.orderRecords.length}}">
+        <view class="sell-record-list-nolist">
+            还没有客户抢购哦…
+        </view>
+    </view>
+    <view class="sell-record-list color4" wx:else>
+        <view class="sell-record-list-title">
+            <text>买家手机号</text>
+            <text>购买时间</text>
+            <text>支付方式</text>
+        </view>
+        <scroll-view class="sell-record-list-content" scroll-y bindscrolltolower='getListLower'>
+            <repeat class="sell-record-list-item" for="{{dataList.orderRecords}}" key="index" index="index" item="item">
+                <text>{{item.buyerPhone}}</text>
+                <text>{{item.createTime}}</text>
+                <text>{{item.payType}}</text>
+            </repeat>
+            <view class="sell-record-list-item kong"></view>
+        </scroll-view>
+    </view>
+    <view class="ad_popError" wx:if="{{popErrorMsg}}">{{popErrorMsg}}</view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import SELL from '../../../utils/sellFetch.js';
+import AuthProvider from '../../../utils/AuthProvider.js';
+import utils from '../../../utils/util.js';
+import API from '../../../utils/api.js';
+export default class Recoed extends wepy.page {
+  config = {
+    navigationBarTitleText: '销售记录'
+  };
+  data = {
+    popErrorMsg: null, //错误提示
+    stop: true, //阻止机制
+    id: null, //商品id
+    dataList: {
+      orderRecords: [],
+      skuName: '',
+      skuPic: null
+    },
+    pageInfo: {
+      currentPage: 0,
+      pageSize: 10
+    }
+  };
+  onLoad(options) {
+    SELL.shortTolong(options.scene, result => {
+      'use strict';
+      if (result.data.resultCode === '100') {
+        let data = {
+          id: result.data.resultContent,
+          currentPage: 0,
+          pageSize: 10
+        };
+        SELL.getOrdersList(data, res => {
+          'use strict';
+          console.log(res);
+          if (res.data.resultCode === '100') {
+            this.id = result.data.resultContent;
+            this.pageInfo = res.data.pageInfo;
+            this.dataList = this.formatList(res.data.resultContent);
+            this.$apply();
+          } else {
+            utils.ErrorTips(this, res.data.detailDescription);
+          }
+        });
+      }
+    });
+  }
+  formatList(arr) {
+    arr.orderRecords.map(item => {
+      'use strict';
+      item.payType = this.formatPayType(item.payType);
+      item.createTime = this.formatKillDate(item.createTime);
+    });
+    return arr;
+  }
+  formatPayType(str) {
+    switch (str) {
+      case 8:
+        return '到店支付';
+        break;
+      case 3:
+        return '在线支付';
+        break;
+    }
+  }
+  formatKillDate(str) {
+    return str.replace('T', ' ');
+  }
+}
+</script>

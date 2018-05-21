@@ -1,0 +1,133 @@
+<style lang="less">
+.cropper-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  background-color: rgba(0, 0, 0, 0.95);
+  color: #04b00f;
+}
+</style>
+<template>
+<view wx:if="{{showstatus}}" style="background:black;position: fixed;top:0;left: 0; z-index: 99999;height: 100%;width:100%">
+             <canvas class="cropper" disable-scroll="true" @touchstart="touchStart" @touchmove="touchMove"
+                @touchend="touchEnd" style="width:{{cropperopt.width}}px;height:{{cropperopt.height}}px;background-color: rgba(0, 0, 0, 0.8);"
+                canvas-id="{{cropperopt.id}}">
+        </canvas>
+            <view class="cropper-buttons">
+                <view class="getCropperImage" @tap="getCropperImage">生成图片</view>
+            </view>
+        </view>
+</template>
+<script>
+import wepy from 'wepy';
+import utils from '../utils/util.js';
+import WeCropper from 'we-cropper';
+let wecropper = {};
+export default class wecroppers extends wepy.component {
+  props = {
+    cropperopt: {
+      type: Object,
+      default: {},
+      twoWay: true
+    },
+    showstatus: {
+      type: Boolean,
+      default: false
+    },
+    fromdata: {
+      type: Object,
+      default: {},
+      twoWay: true
+    },
+    imgUrl: {
+      type: String,
+      default: '',
+      twoWay: true
+    }
+  };
+  onLoad() {
+    const cropperopt = this.cropperopt;
+    wecropper = new WeCropper(cropperopt)
+      .on('ready', ctx => {
+        console.log(`wecropper is ready for work!`);
+      })
+      .on('beforeImageLoad', ctx => {
+        console.log(`before picture loaded, i can do something`);
+        console.log(`current canvas context:`, ctx);
+        wx.showToast({
+          title: '上传中',
+          icon: 'loading',
+          duration: 20000
+        });
+      })
+      .on('imageLoad', ctx => {
+        console.log(`picture loaded`);
+        console.log(`current canvas context:`, ctx);
+        wx.hideToast();
+      })
+      .on('beforeDraw', (ctx, instance) => {
+        console.log(`before canvas draw,i can do something`);
+        console.log(`current canvas context:`, ctx);
+      })
+      .updateCanvas();
+  }
+  methods = {
+    touchStart: e => {
+      wecropper.touchStart(e);
+    },
+    touchMove: e => {
+      wecropper.touchMove(e);
+    },
+    touchEnd: e => {
+      wecropper.touchEnd(e);
+    },
+    getCropperImage: () => {
+      let _this = this;
+      wecropper.getCropperImage(src => {
+        if (src) {
+          console.log(src, 'tupianlianjie');
+          utils.downloadImg(src, res => {
+            console.log(res);
+            _this.imgUrl = res.url;
+            _this.showstatus = false;
+            _this.fromdata.mediaItem.path = res.url;
+            _this.fromdata.mediaItem.mediaId = res.id;
+            _this.$apply();
+          });
+          // wx.previewImage({
+          //   current: '', // 当前显示图片的http链接
+          //   urls: [src] // 需要预览的图片http链接列表
+          // });
+        } else {
+          console.log('获取图片地址失败，请稍后重试');
+        }
+      });
+    },
+    uploadTap: e => {
+      const self = this;
+      console.log(self);
+      wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success(res) {
+          const src = res.tempFilePaths[0];
+          //  获取裁剪图片资源后，给data添加src属性及其值
+          self.showstatus = true;
+          self.$apply();
+          console.log(src);
+          console.log(wecropper);
+          wecropper.pushOrign(src);
+        }
+      });
+    }
+  };
+}
+</script>

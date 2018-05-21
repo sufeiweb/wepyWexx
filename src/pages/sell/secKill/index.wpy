@@ -1,0 +1,585 @@
+<style lang='less'>
+/* pages/sell/history/index.wxss */
+.sell-secKill .sell-secKill-footer {
+  /*position:fixed;*/
+  height: 100rpx;
+  border-radius: 0 !important;
+  border: none !important;
+  background-image: linear-gradient(
+    -90deg,
+    #ff5b41 0%,
+    #ff773e 45%,
+    #ff5b41 100%
+  );
+  box-shadow: 0 6rpx 11rpx 0;
+  line-height: 100rpx;
+  text-align: center;
+  font-family: PingFangSC-Medium;
+  font-size: 34rpx;
+  color: #ffffff;
+}
+.sell-secKill-header-top {
+  padding: 61rpx 70rpx 53rpx 70rpx;
+}
+.sell-secKill-header-top-image {
+  width: 600rpx;
+  height: 600rpx;
+  margin: 0 auto;
+  background-size: cover;
+  background-position: center;
+}
+
+.sell-secKill-header-top-box {
+  position: relative;
+}
+.sell-secKill-header-top-box .sell-secKill-header-top-btn {
+  position: absolute;
+  bottom: 0;
+  height: 80rpx;
+  width: 100%;
+  text-align: center;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+}
+.sell-secKill-header-from {
+  padding: 0 40rpx 0 30rpx;
+}
+.sell-secKill-header-from-item .ipt-box,
+.sell-secKill-header-from-item {
+  display: flex;
+  font-size: 28rpx;
+}
+.sell-secKill-header-from-item {
+  margin-bottom: 20rpx;
+}
+.sell-secKill-header-from-item .ipt-box {
+  align-items: center;
+}
+.sell-secKill-header-from-item .ipt-box .item-price {
+  margin-right: 20rpx;
+}
+.sell-secKill-header-from-item .item-ipt-l {
+  width: 528rpx;
+  height: 90rpx;
+  border-radius: 10rpx;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+}
+.sell-secKill-header-from-item .item-ipt-s {
+  width: 190rpx;
+  height: 90rpx;
+  border-radius: 10rpx;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+}
+.sell-secKill-header-from-item .item-title {
+  padding-top: 25rpx;
+  width: 112rpx;
+  margin-right: 20rpx;
+  text-align: right;
+}
+.sell-secKill-header-from-item .item-img {
+  width: 30rpx;
+  height: 30rpx;
+}
+.sell-secKill-header-from-item .item-ipt {
+  flex: 1;
+}
+.sell-secKill-header-from-item .item-text-name {
+  padding: 25rpx 30rpx;
+  box-sizing: border-box;
+}
+.sell-secKill-header-from-item .ipt-box-radio-right {
+  margin-right: 20rpx;
+}
+.sell-secKill-header-from-item .ipt-radio {
+  display: none;
+}
+.sell-secKill-header-from-item .ipt-box-radio {
+  text-align: center;
+  line-height: 90rpx;
+}
+.sell-secKill-header-from-item .ipt-box-radio.active {
+  background: url('https://cloud.gemii.cc/lizcloud/fs/noauth/media/5aebd5178c34ba0032ee9c88')
+    no-repeat;
+  background-size: 100%;
+  color: #ff3939;
+}
+.sell-secKill-header-from-item .item-ipt.item-ipt-adr {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sell-secKill-header-from-item-s {
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+.sell-secKill-header-from-item-s .item-title {
+  display: block;
+  float: left;
+  font-size: 28rpx;
+  padding-top: 25rpx;
+  width: 112rpx;
+  margin-right: 20rpx;
+  text-align: right;
+}
+.sell-secKill-header-from-item-s .ipt-textarea {
+  display: block;
+  float: left;
+  height: 175rpx;
+  width: 528rpx;
+  font-size: 28rpx;
+  padding: 25rpx 30rpx;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+}
+.sell-secKill-header-from-item-s view {
+  display: block;
+  float: left;
+  width: 548rpx;
+  font-size: 28rpx;
+  padding: 25rpx 30rpx;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+}
+.sell-secKill-header-from-item-s view .ipt-textarea-s {
+  width: 548rpx;
+}
+.cropper-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  background-color: rgba(0, 0, 0, 0.95);
+  color: #04b00f;
+}
+</style>
+
+<template>
+    <view style='height:100%;width:100%'>
+      <wecroppers :imgUrl.sync='imgUrl' :cropperopt.sync='cropperOpt' :showstatus.sync = 'showStatus' :fromdata.sync='fromData'></wecroppers>
+        <view class="sell-secKill">
+            <view class="sell-secKill-header">
+                <view class="sell-secKill-header-top">
+                    <image @tap="selectImg" class="sell-secKill-header-top-upload sell-secKill-header-top-image" src="/images/pic_upload@3x.png"
+                        wx:if="{{!imgUrl}}"/>
+                    <view class="sell-secKill-header-top-box borderF6 sell-secKill-header-top-image" @tap="selectImg" wx:else>
+                        <view class="sell-secKill-header-top-image" style="background-image:url({{imgUrl}})" ></view>
+                        <!--<image mode='aspectFit' class="sell-secKill-header-top-image" src="{{imgUrl}}"/>-->
+                        <view class="sell-secKill-header-top-btn">点击更换图片</view>
+                    </view>
+                </view>
+                <view class="sell-secKill-header-from">
+
+                    <view class="sell-secKill-header-from-item">
+                        <text class="color4 item-title">商品标题</text>
+                        <view class="item-ipt-l ipt-box bgColorF6 borderF6 color4">
+                            <input maxlength="30" @input="changeName" class="item-ipt" placeholder='添加商品名称' placeholder-class="colorA1"/>
+                        </view>
+                        <view class="colorRed">*</view>
+                    </view>
+                    <view class="sell-secKill-header-from-item">
+                        <view class="sell-secKill-header-from-item">
+                            <text class="color4 item-title">秒杀价</text>
+                            <view class="ipt-box bgColorF6 borderF6 item-ipt-s">
+                                <text class="color4 item-price">¥</text>
+                                <input type="digit" maxlength="10" @input="changeKillPrice" value="{{fromData.costPrice}}" class="color4 item-ipt" placeholder="0.00" placeholder-class="colorA1"/>
+                            </view>
+                            <view class="colorRed">*</view>
+                        </view>
+                        <view class="sell-secKill-header-from-item">
+                            <text class="color4 item-title">原价</text>
+                            <view class="ipt-box bgColorF6 borderF6 item-ipt-s">
+                                <text class="color4 item-price">¥</text>
+                                <input type="digit" maxlength="10" @input="changeOldPrice" value="{{fromData.marketPrice}}" class="color4 item-ipt" placeholder="0.00" placeholder-class="colorA1"/>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="sell-secKill-header-from-item">
+                        <text class="color4 item-title">库存</text>
+                        <view class="ipt-box bgColorF6 borderF6 item-ipt-s">
+                            <input type="number" @input="changeNum" class="color4 value='{{fromData.totalQuantity}}'  item-ipt" placeholder="0" placeholder-class="colorA1"/>
+                            <text class="color4">件</text>
+                        </view>
+                    </view>
+                    <view class="sell-secKill-header-from-item">
+                        <text class="color4 item-title">秒杀时间</text>
+                        <view class="ipt-box item-ipt-l bgColorF6 borderF6" @tap="showDateModule">
+                            <input value="{{killDate}}" disabled class="color4 item-ipt" placeholder="请选择时间段" placeholder-class="colorA1"/>
+                            <image class="item-img" src="/images/ic_arrow@3x.png"/>
+                        </view>
+                    </view>
+                    <view class="sell-secKill-header-from-item">
+                        <text class="color4 item-title">支付方式</text>
+                        <radio-group class="ipt-box" @change="radioChange">
+                            <label class="{{fromData.paymentType == 3? 'ipt-box-radio item-ipt-s colorA1 bgColorF6  ipt-box-radio-right active':'ipt-box-radio item-ipt-s colorA1 bgColorF6 borderF6 ipt-box-radio-right'}}">
+                                <radio class='ipt-radio' value="3"/>
+                                在线支付
+                            </label>
+                            <label class="{{fromData.paymentType == 8? 'ipt-box-radio item-ipt-s colorA1 bgColorF6  ipt-box-radio-right active':'ipt-box-radio item-ipt-s colorA1 bgColorF6 borderF6 ipt-box-radio-right'}}">
+                                <radio class='ipt-radio' value="8"/>
+                                到店支付
+                            </label>
+                        </radio-group>
+                    </view>
+                    <view class="sell-secKill-header-from-item">
+                        <text class="color4 item-title">店铺名称</text>
+                        <view class="item-ipt-l ipt-box bgColorF6 borderF6 color4">
+                            <input maxlength="30" value="{{fromData.storeName}}" @input="changeStoreName" class="color4 item-ipt" placeholder='请输入门店名称' placeholder-class="colorA1"/>
+                        </view>
+                        <view class="colorRed">*</view>
+                    </view>
+                    <view class="sell-secKill-header-from-item">
+                        <text class="color4 item-title">门店地址</text>
+                        <view class="ipt-box item-ipt-l bgColorF6 borderF6">
+                            <input disabled value="{{fromData.address}}" @tap="changeAdr" class="color4 item-ipt item-ipt-adr" placeholder="请选择取货地址" placeholder-class="colorA1"/>
+                            <image class="item-img" src="/images/ic_arrow@3x.png"/>
+                        </view>
+                        <view class="colorRed">*</view>
+                    </view>
+                    <view class="sell-secKill-header-from-item-s" wx:if="{{!killStatus}}">
+                        <text class="color4 item-title">商品描述</text>
+                        <textarea @input="changeDesc" class="ipt-textarea item-ipt-l bgColorF6 borderF6 color4" placeholder='描述商品细节，可不填' placeholder-class="colorA1"/>
+                    </view>
+                </view>
+            </view>
+            <form @submit="formSubmit" report-submit="{{true}}">
+                <button class="sell-secKill-footer" formType="submit" @tap="submitKill">发起秒杀</button>
+            </form>
+            <view class="ad_popError" wx:if="{{popErrorMsg}}">{{popErrorMsg}}</view>
+            <view class="date-module" wx:if="{{killStatus}}">
+                <view class="date-module-back" @tap="closeDateModule"></view>
+                <view class="date-module-box">
+                    <view class="date-module-btn-box">
+                        <view @tap="closeDateModule" class="close">取消</view>
+                        <view @tap="confirmDateModule" class="confirm">确定</view>
+                    </view>
+                    <picker-view class="date-module-main" indicator-style="height: 50px;" @change="bindChange">
+                        <picker-view-column class="date-module-main-item">
+                            <view wx:for="{{startH}}" wx:key="index" style="line-height: 50px">{{item}}</view>
+                        </picker-view-column>
+                        :
+                        <picker-view-column class="date-module-main-item">
+                            <view wx:for="{{startM}}" wx:key="index" style="line-height: 50px">{{item}}</view>
+                        </picker-view-column>
+                        到
+                        <picker-view-column class="date-module-main-item">
+                            <view wx:for="{{endH}}" wx:key="index" style="line-height: 50px">{{item}}</view>
+                        </picker-view-column>
+                        ：
+                        <picker-view-column class="date-module-main-item">
+                            <view wx:for="{{endM}}" wx:key="index" style="line-height: 50px">{{item}}</view>
+                        </picker-view-column>
+                    </picker-view>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import SELL from '../../../utils/sellFetch.js';
+import AuthProvider from '../../../utils/AuthProvider.js';
+import utils from '../../../utils/util.js';
+
+const device = wx.getSystemInfoSync();
+console.log(device);
+const width = device.windowWidth;
+const height = device.windowHeight - 50;
+
+import wecroppers from './../../../components/wecropper';
+
+export default class SecKill extends wepy.page {
+  config = {
+    navigationBarTitleText: '发起秒杀'
+  };
+  components = {
+    wecroppers: wecroppers
+  };
+  data = {
+    showStatus: false,
+    cropperOpt: {
+      id: 'cropper',
+      width,
+      height,
+      scale: 2.5,
+      zoom: 8,
+      cut: {
+        x: (width - 300) / 2,
+        y: (height - 300) / 2,
+        width: 300,
+        height: 300
+      }
+    },
+    popErrorMsg: null, //错误提示
+    stop: true, //阻止机制
+    killStatus: false, //秒杀时间选择
+    startH: null,
+    endH: null,
+    startM: null,
+    endM: null,
+    valueInit: null, //选择后value数组
+    killDate: '', //秒杀时间显示
+    imgUrl: null, //初始图片地址
+    fromData: {
+      mediaItem: {
+        mediaId: null, //图片id
+        path: null //图片path
+      }, //图片信息
+      name: null, //商品标题
+      costPrice: null, //秒杀价
+      marketPrice: null, //市场价
+      totalQuantity: null,
+      effectiveDate: null, //开始时间
+      expiredDate: null, //结束时间
+      address: null, //地址
+      description: null, //商品描述
+      storeName: null, //门店名称
+      paymentType: 3, //支付方式 支付方式，0--线下支付/门店支付 3--微信支付 4--支付宝支付 ,
+      takingType: '1' //取货方式，1--到店取货 2--快递 3--无需取货
+    }
+  };
+  onLoad(options) {
+    this.stop = true;
+    if (options.id) {
+      this.id = options.id;
+      this.$apply();
+    }
+    SELL.getShopMessage(res => {
+      'use strict';
+      console.log(res);
+      if (res.data.resultCode === '100' && res.data.resultContent.length) {
+        this.fromData.storeName = res.data.resultContent[0].name;
+        this.fromData.address = res.data.resultContent[0].detailAddr;
+        this.$apply();
+      }
+    });
+  }
+  methods = {
+    changeName: e => {
+      'use strict';
+      this.fromData.name = e.detail.value;
+      this.$apply();
+    }, //填写姓名
+    changeKillPrice: e => {
+      'use strict';
+      this.fromData.costPrice = e.detail.value;
+      this.$apply();
+    }, //填写秒杀价
+    changeOldPrice: e => {
+      'use strict';
+      this.fromData.marketPrice = e.detail.value;
+      this.$apply();
+    }, //填写原价
+    changeNum: e => {
+      'use strict';
+      this.fromData.totalQuantity = e.detail.value || null;
+      this.$apply();
+    }, //填写库存
+    bindChange: e => {
+      console.log(e.detail.value);
+      this.valueInit = e.detail.value;
+      this.$apply();
+    }, //选择时间
+    confirmDateModule: () => {
+      let valueInit = this.valueInit;
+      let startH = this.startH;
+      let startM = this.startM;
+      let endH = this.endH;
+      let endM = this.endM;
+      console.log(valueInit);
+      if (!valueInit) {
+        utils.ErrorTips(this, '请选择秒杀时间');
+        return;
+      }
+      let killDate = `${startH[valueInit[0]]}:${startM[valueInit[1]]}`;
+      let killEndDate = `${endH[valueInit[2]]}:${endM[valueInit[3]]}`;
+      if (startH[valueInit[0]] > endH[valueInit[2]]) {
+        utils.ErrorTips(this, '结束时间必须大于开始时间');
+        return;
+      } else if (
+        startH[valueInit[0]] === endH[valueInit[2]] &&
+        startM[valueInit[1]] >= endM[valueInit[3]]
+      ) {
+        utils.ErrorTips(this, '结束时间必须大于开始时间');
+        return;
+      } else {
+        this.killDate = killDate + ' 到 ' + killEndDate;
+        this.fromData.effectiveDate = this.updateTime(killDate);
+        this.fromData.expiredDate = this.updateTime(killEndDate);
+        this.killStatus = false;
+        this.$apply();
+      }
+    }, //确定时间
+    closeDateModule: () => {
+      this.killStatus = false;
+      this.$apply();
+    }, //关闭时间
+    showDateModule: () => {
+      'use strict';
+      this.killStatus = true;
+      this.valueInit = null;
+      this.killDate = null;
+      this.$apply();
+      let dateNew = new Date();
+      let newH = dateNew.getHours();
+      let startH = [];
+      let startM = [];
+      console.log(newH, '当前时间');
+      for (let i = newH; i < 24; i++) {
+        startH.push(utils.formatZero(i));
+      }
+      for (let i = 0; i < 60; i++) {
+        startM.push(utils.formatZero(i));
+      }
+      this.startH = startH;
+      this.endH = startH;
+      this.startM = startM;
+      this.endM = startM;
+      this.$apply();
+    }, //打开时间
+    radioChange: e => {
+      this.fromData.paymentType = e.detail.value;
+      this.$apply();
+    }, //选择支付方式
+    changeStoreName: e => {
+      this.fromData.storeName = e.detail.value;
+      this.$apply();
+    }, //名店名称
+    changeAdr: function() {
+      if (wx.chooseAddress) {
+        let _this = this;
+        wx.chooseAddress({
+          success: res => {
+            console.log(JSON.stringify(res));
+            let adr =
+              res.provinceName + res.cityName + res.countyName + res.detailInfo;
+            _this.fromData.address = adr;
+            _this.$apply();
+          },
+          fail: req => {
+            'use strict';
+            wx.showModal({
+              // 向用户提示需要权限才能继续
+              title: '提示',
+              content:
+                '您未正确选择地址，将无法使用收货地址，请重新授权或选择地址',
+              mask: true,
+              confirmColor: '#F45C43',
+              success: function(res) {
+                if (res.confirm) {
+                  console.log('用户点击确定');
+                  wx.openSetting({
+                    //打开授权开关界面，让用户手动授权
+                    success: res => {
+                      console.log(res);
+                      if (res.authSetting['scope.address']) {
+                        wx.chooseAddress({
+                          success: res => {
+                            console.log(JSON.stringify(res));
+                            let adr =
+                              res.provinceName +
+                              res.cityName +
+                              res.countyName +
+                              res.detailInfo;
+                            _this.fromData.address = adr;
+                            _this.$apply();
+                          }
+                        });
+                      } else {
+                        console.log('reject authrize');
+                      }
+                    }
+                  });
+                } else if (res.cancel) {
+                  wx.hideModal();
+                }
+              }
+            });
+          }
+        });
+      } else {
+        console.log('当前微信版本不支持chooseAddress');
+      }
+    }, //选择地址
+    changeDesc: e => {
+      'use strict';
+      this.fromData.descriptio = e.detail.value;
+      this.$apply();
+    }, //填写描述
+    submitKill: () => {
+      let stop = this.stop;
+      let fromData = this.fromData;
+      let imgUrl = this.imgUrl;
+      console.log(fromData, '发起秒杀参数');
+      if (
+        !imgUrl ||
+        !fromData.address ||
+        !fromData.storeName ||
+        !Number(fromData.costPrice) ||
+        !fromData.paymentType ||
+        !fromData.name
+      ) {
+        utils.ErrorTips(this, '请完成商品属性的填写');
+        return;
+      } else if (
+        Number(fromData.marketPrice) &&
+        Number(fromData.marketPrice) <= Number(fromData.costPrice)
+      ) {
+        utils.ErrorTips(this, '原价不得低于秒杀价');
+        return;
+      } else {
+        if (stop) {
+          this.stop = true;
+          if (
+            fromData.totalQuantity === 'null' ||
+            fromData.totalQuantity === '0' ||
+            !fromData.totalQuantity ||
+            fromData.totalQuantity === '0.0' ||
+            fromData.totalQuantity === '0.00'
+          ) {
+            fromData.totalQuantity = 1;
+          }
+          SELL.createProduct(fromData, res => {
+            'use strict';
+            console.log(res.data);
+            if (res.data.resultCode === '100') {
+              utils.pageGo(
+                '/pages/sell/webView/index?updateState=1&scene=' +
+                  res.data.resultContent,
+                1
+              );
+            } else {
+              utils.ErrorTips(this, res.data.detailDescription);
+            }
+          });
+        }
+      }
+    }, //提交秒杀参数
+    formSubmit: e => {
+      utils.formSubmit(e);
+    },
+    selectImg: e => {
+      this.$invoke('wecroppers', 'uploadTap');
+    }
+  };
+  updateTime(str) {
+    let date = new Date();
+    let Y = date.getFullYear();
+    let M = date.getMonth() + 1;
+    let D = date.getDate();
+    let timer = Y + '/' + M + '/' + D + ' ' + str;
+    let timers = new Date(timer).getTime();
+    return timers;
+  }
+}
+</script>

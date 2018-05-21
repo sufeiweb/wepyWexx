@@ -1,0 +1,406 @@
+<style lang="less">
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+/**app.wxss**/
+page {
+  font-family: PingFangSC-Regular;
+  height: 100%;
+  background: #fff;
+}
+.colorA1 {
+  color: #a1a1a1;
+}
+.color4 {
+  color: #444;
+}
+.colorDA {
+  color: #dadada;
+}
+.colorRed {
+  color: #ff3939;
+}
+.bgColorC0 {
+  background: #c0c0c0;
+}
+.bgColorS {
+  background-image: linear-gradient(
+    -90deg,
+    #ff5b41 0%,
+    #ff773e 45%,
+    #ff5b41 100%
+  );
+}
+.borderRed {
+  border: 1px solid #ff3939;
+}
+.borderA1 {
+  border: 1px solid #a1a1a1;
+}
+.borderF6 {
+  border: 1px solid #f6f6f6;
+}
+.bgColorF6 {
+  background: #f6f6f6;
+}
+.sell-withdraw .ad_popError {
+  top: 40%;
+}
+/*全局错区提示信息样式*/
+.ad_popError {
+  z-index: 9999999;
+  position: fixed;
+  width: 400rpx;
+  font-size: 28rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 10rpx;
+  color: #eaeaea;
+  background: rgba(0, 0, 0, 0.7);
+}
+/*选择时间模态框*/
+.date-module {
+  font-size: 32rpx;
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+.date-module .date-module-box {
+  width: 100%;
+  background: #fff;
+  position: absolute;
+  bottom: 0;
+  height: 500rpx;
+}
+.date-module .date-module-box .date-module-btn-box {
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+}
+.date-module .date-module-back {
+  height: 100%;
+  width: 100%;
+}
+.date-module .date-module-box .date-module-btn-box .close {
+  color: #e64340;
+}
+.date-module .date-module-box .date-module-btn-box .confirm {
+  color: #09bb07;
+}
+
+.date-module .date-module-main {
+  width: 100%;
+  height: 400rpx;
+  line-height: 400rpx;
+  text-align: center;
+}
+.date-module .date-module-main .date-module-main-item {
+  margin: 0 30rpx;
+}
+/*提现模态框*/
+.cash-module {
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+.cash-module .cash-module-box {
+  width: 500rpx;
+  background: #fff;
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-radius: 10rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 28rpx 0 rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+.cash-module .cash-module-box .cash-module-box-header {
+  font-family: PingFangSC-Regular;
+  padding-top: 40rpx;
+  padding-bottom: 47rpx;
+  text-align: center;
+  font-size: 30rpx;
+}
+.cash-module .cash-module-box .cash-module-box-middle {
+  padding: 0 1em;
+  font-size: 30rpx;
+  margin-bottom: 70rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cash-module .cash-module-box .cash-module-box-middle .ipu-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.cash-module .cash-module-box .cash-module-box-middle .ipu-box .icon-widthdraw {
+  width: 20rpx;
+  height: 24rpx;
+  margin-left: 40rpx;
+}
+.cash-module
+  .cash-module-box
+  .cash-module-box-middle
+  .cash-module-box-middle-ipt {
+  width: 256rpx;
+  box-sizing: border-box;
+  flex: 1;
+  height: 24rpx;
+  font-family: PingFangSC-Medium;
+  font-size: 34rpx;
+  padding: 0 26rpx;
+  -webkit-caret-color: #f03340;
+  caret-color: #f03340;
+}
+.cash-module
+  .cash-module-box
+  .cash-module-box-middle
+  .cash-module-box-middle-ipt-text {
+  width: 130rpx;
+  text-align: left;
+  display: block;
+  color: #f03340;
+  font-family: PingFangSC-Regular;
+  font-size: 28rpx;
+}
+.cash-module .cash-module-box .cash-module-box-footer {
+  display: flex;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 36rpx;
+  border-top: 1px solid #eee;
+}
+.cash-module .cash-module-box .cash-module-box-footer .btn {
+  flex: 1;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+  font-size: 30rpx;
+  color: #a1a1a1;
+}
+.cash-module
+  .cash-module-box
+  .cash-module-box-footer
+  .cash-module-box-footer-confirm {
+  color: #f03340;
+  border-left: 1px solid #eee;
+}
+button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+}
+button::after {
+  border-radius: 0;
+  border: 0 none;
+}
+</style>
+
+<script>
+import wepy from 'wepy';
+import 'wepy-async-function';
+
+import API from './utils/api.js';
+import wxRequest from './utils/wxRequest.js';
+import util from './utils/util.js';
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/sell/home/index',
+      'pages/sell/secKill/index',
+      'pages/sell/apply/index',
+      'pages/sell/withdraw/index',
+      'pages/sell/record/index',
+      'pages/sell/poster/index',
+      'pages/buyer/secKill/index',
+      'pages/buyer/success/index',
+      'pages/sell/webView/index'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#FF3939',
+      navigationBarTitleText: '好物来',
+      navigationBarTextStyle: '#FFF'
+    }
+  };
+
+  globalData = {
+    userInfo: null
+  };
+
+  constructor() {
+    super();
+    this.use('requestfix');
+    this.use('promisify');
+  }
+
+  onLaunch() {
+    // this.testAsync();
+    console.log(API);
+  }
+  // 全局获取用户信息
+  getUserInfo(res, type, callback) {
+    let _this = this;
+    console.log('---获取用户信息---');
+    console.log(res.detail);
+    console.log('----------');
+    if (res.detail.errMsg == 'getUserInfo:fail auth deny') {
+      wepy.showModal({
+        title: '用户授权',
+        content: '本小程序需用户授权，请重新点击按钮授权。',
+        mask: true,
+        confirmColor: '#F45C43',
+        success: function(res) {}
+      });
+    } else if (res.detail.errMsg == 'getUserInfo:ok') {
+      let userInfo = res.detail.userInfo;
+      _this.globalData.userInfo = userInfo;
+      wepy.setStorageSync('userinfo', userInfo);
+      _this.wxLogin(res.detail.encryptedData, res.detail.iv, type);
+      callback({
+        hasUserInfo: true,
+        userInfo: userInfo
+      });
+    }
+  }
+  //授权登录，拿token
+  wxLogin(encryptedData, iv, type) {
+    console.log(33333);
+    wepy.setStorageSync('userType', type); //user登录方式，sell，buy
+
+    wx.login({
+      success: function(res) {
+        console.log(44444);
+        if (res.code) {
+          let params = {
+            appid: API.APP_ID,
+            code: res.code,
+            encryptedData: encryptedData,
+            iv: iv
+          };
+          if (type === 'sell') {
+            wxRequest
+              .fetch(
+                API.authLogin + '?_iscreateUser=false',
+                null,
+                params,
+                'POST'
+              )
+              .then(res => {
+                'use strict';
+                // console.log()
+                if (res.data.resultCode === '100') {
+                  console.log(res.data.resultContent);
+                  wepy.setStorageSync(
+                    'unionid',
+                    res.data.resultContent.unionId
+                  );
+                  wepy.setStorageSync('openid', res.data.resultContent.openId);
+                  util.pageGo('/pages/sell/apply/index', 1);
+                  // AuthProvider.onLogin(type, res => {
+                  //     console.log(res, '获取token')
+                  // })
+                } else {
+                  console.log('error');
+                }
+              });
+          } else if (type === 'buy') {
+            wxRequest.fetch(API.authLogin, null, params, 'POST').then(res => {
+              'use strict';
+              // console.log()
+              if (res.data.resultCode === '100') {
+                console.log(res.data.resultContent);
+                wepy.setStorageSync('unionid', res.data.resultContent.unionId);
+                wepy.setStorageSync('openid', res.data.resultContent.openId);
+                AuthProvider.onLogin(type, null, res => {
+                  console.log(res, '获取token');
+                });
+              } else {
+                console.log('error');
+              }
+            });
+          }
+        }
+      },
+      fail: function(req) {}
+    });
+  }
+  // 获取全局属性 用户信息，登录状态
+  getGlobalDatas(canIUse, callback) {
+    let _this = this;
+    let userinfos = wepy.getStorageSync('userinfo');
+    if (userinfos.hasOwnProperty('nickName')) {
+      console.log(userinfos, '获取全局属性 用户信息，登录状态');
+      callback({
+        userInfo: userinfos,
+        hasUserInfo: true
+      });
+    } else {
+      console.log('globalData userInfo');
+      if (_this.globalData.userInfo) {
+        callback({
+          userInfo: app.globalData.userInfo,
+          hasUserInfo: true
+        });
+      } else if (canIUse) {
+        // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+        // 所以此处加入 callback 以防止这种情况
+        _this.userInfoReadyCallback = res => {
+          callback({
+            userInfo: res.userInfo,
+            hasUserInfo: true
+          });
+        };
+      } else if (!canIUse) {
+        console.log('low version');
+        wepy.showModal({
+          // 向用户提示升级至最新版微信。
+          title: '提示',
+          confirmColor: '#F45C43',
+          content: '微信版本过低，请升级至最新版。',
+          mask: true
+        });
+      } else {
+        // 在没有 open-type=getUserInfo 版本的兼容处理
+        wx.getUserInfo({
+          success: res => {
+            _this.globalData.userInfo = res.userInfo;
+            callback({
+              userInfo: res.userInfo,
+              hasUserInfo: true
+            });
+            console.log(success);
+          }
+        });
+      }
+    }
+  }
+}
+</script>

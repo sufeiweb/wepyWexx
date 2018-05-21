@@ -1,0 +1,365 @@
+<style>
+/* pages/sell/withdraw/index.wxss */
+/*https://cloud.gemii.cc/lizcloud/fs/noauth/media/5aec00558c34ba0032ee9ca0*/
+.sell-withdraw {
+  height: 100%;
+}
+.sell-withdraw .sell-withdraw-header {
+  background: url('https://cloud.gemii.cc/lizcloud/fs/noauth/media/5aec00558c34ba0032ee9ca0')
+    no-repeat;
+  background-size: cover;
+  height: 347rpx;
+  color: #fff;
+  display: flex;
+  padding: 40rpx;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+.sell-withdraw-header-left {
+  margin-bottom: 11rpx;
+}
+.sell-withdraw-header-left-top .title {
+  font-family: PingFangSC-Medium;
+  font-size: 34rpx;
+}
+.sell-withdraw-header-left-top .money {
+  font-family: PingFangSC-Semibold;
+  font-size: 80rpx;
+}
+.sell-withdraw-header-left-bottom .title {
+  font-family: PingFangSC-Regular;
+  font-size: 28rpx;
+}
+.sell-withdraw-header-left-bottom .money {
+  font-family: PingFangSC-Semibold;
+  font-size: 40rpx;
+}
+.sell-withdraw-header-right .cash-btn {
+  width: 181rpx;
+  height: 88rpx;
+  text-align: center;
+  line-height: 88rpx;
+  background: #fff;
+  border-radius: 100rpx;
+  font-family: PingFangSC-Medium;
+  font-size: 34rpx;
+}
+.sell-withdraw .sell-withdraw-list {
+  height: calc(100% - 347rpx);
+  padding: 0 32rpx;
+  box-sizing: border-box;
+}
+.sell-withdraw-list-item {
+  border-bottom: 1px solid #e6e6e6;
+  padding: 50rpx 0;
+  box-sizing: border-box;
+}
+.sell-withdraw-list-item .item-top {
+  display: flex;
+  justify-content: space-between;
+  height: 150rpx;
+  overflow: hidden;
+  margin-bottom: 40rpx;
+}
+.sell-withdraw-list-item .item-top .item-top-img {
+  width: 150rpx;
+  height: 150rpx;
+  margin-right: 20rpx;
+}
+.sell-withdraw-list-item .item-top .item-top-text {
+  flex: 1;
+}
+.sell-withdraw-list-item .item-top .item-top-text .item-top-text-top {
+  font-size: 34rpx;
+  margin-bottom: 14rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.sell-withdraw-list-item .item-top .item-top-text .item-top-text-bottom {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+}
+.sell-withdraw-list-item
+  .item-top
+  .item-top-text
+  .item-top-text-bottom
+  .item-top-text-bottom-num {
+  margin-right: 19rpx;
+}
+.sell-withdraw-list-item .item-bottom {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.sell-withdraw-list-item .item-bottom .item-bottom-btn {
+  border-radius: 100rpx;
+  height: 66rpx;
+  width: 180rpx;
+  text-align: center;
+  line-height: 66rpx;
+  font-size: 28rpx;
+}
+.sell-withdraw-list-item .item-bottom .item-bottom-btn:nth-of-type(2) {
+  margin: 0 65rpx;
+}
+</style>
+<template>
+    <view class="sell-withdraw">
+    <view class="sell-withdraw-header">
+        <view class="sell-withdraw-header-left">
+            <view class="sell-withdraw-header-left-top">
+                <view class="title">累计销售额（元）</view>
+                <view class="money">{{cumulativeIncome}}</view>
+            </view>
+            <view class="sell-withdraw-header-left-bottom">
+                <view class="title">可提现（元）</view>
+                <view class="money">{{cashMoney}}</view>
+            </view>
+        </view>
+        <view class="sell-withdraw-header-right">
+            <view class="colorRed cash-btn" @tap="showCash">提现</view>
+        </view>
+    </view>
+    <scroll-view scroll-y class="sell-withdraw-list" @scrolltolower='getListLower'>
+        <repeat class="sell-withdraw-list-item" for="{{dataList}}" key="index" index="index" item="item">
+            <view class="sell-withdraw-list-item">
+                        <view class="item-top">
+                            <image class="item-top-img" src="{{item.coverPhoto}}"/>
+                            <view class="item-top-text">
+                                <view class="item-top-text-top color4">
+                                    {{item.name}}
+                                </view>
+                                <view class="item-top-text-bottom colorA1">
+                                    <view class="item-top-text-bottom-num">
+                                        <text>售出：</text>
+                                        <text>{{item.totalSaledQuantity}}件</text>
+                                    </view>
+                                    <view class="item-top-text-bottom-num">
+                                        <text>售价：</text>
+                                        <text>¥{{item.showPrice}}</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="item-bottom">
+                            <view wx:if="{{item.status === 1}}" class="item-bottom-btn colorA1 borderA1"  @tap="stopActivity({{item.id}})">终止活动</view>
+                            <view wx:if="{{item.status === 1}}" class="item-bottom-btn colorRed borderRed"  @tap="goShare({{item.id}})">分享</view>
+                            <view class="item-bottom-btn color4 borderRed colorRed" @tap="goRecord({{item.id}})">销售记录</view>
+                        </view>
+                    </view>
+        </repeat>
+    </scroll-view>
+    <view class="ad_popError" wx:if="{{popErrorMsg}}">{{popErrorMsg}}</view>
+    <view class="cash-module" wx:if="{{cashStatus}}">
+        <view class="cash-module-box">
+            <view class="cash-module-box-header">提现金额</view>
+            <view class="cash-module-box-middle">
+                <view class="ipu-box">
+                    <image src="/images/ic_withdraw_rmb.png" class="icon-widthdraw"/>
+                    <input type="digit" focus="{{true}}" class="cash-module-box-middle-ipt" value="{{cashMoneyValue}}" placeholder-class="cash-module-box-middle-ipt-p" @input="iptCashMoney"/>
+                </view>
+                <text class="cash-module-box-middle-ipt-text" @tap="cashAllMoney({{cashMoney}})">全部提现</text>
+            </view>
+            <view class="cash-module-box-footer">
+                <view class="cash-module-box-footer-cancel btn" @tap="hideCash">取消</view>
+                <view class="cash-module-box-footer-confirm btn" @tap="confirmCash">确定</view>
+            </view>
+        </view>
+    </view>
+</view>
+</template>
+<script>
+import wepy from 'wepy';
+import SELL from '../../../utils/sellFetch.js';
+import AuthProvider from '../../../utils/AuthProvider.js';
+import utils from '../../../utils/util.js';
+import API from '../../../utils/api.js';
+export default class Withdraw extends wepy.page {
+  config = {
+    navigationBarTitleText: '已发布活动'
+  };
+  data = {
+    popErrorMsg: null, //错误提示
+    stop: true, //阻止机制
+    cashMoney: '0.00', //最大提现金额
+    cumulativeIncome: '0.00', //累计收益
+    cashMoneyValue: null, //提现金额
+    cashStatus: false,
+    dataList: [],
+    pageInfo: {
+      currentPage: 0,
+      pageSize: 10,
+      totalPage: 0
+    }
+  };
+  onLoad() {
+    let data = {
+      currentPage: 0,
+      pageSize: 10
+    };
+    SELL.loadAccountInfo(res => {
+      'use strict';
+      console.log(res);
+      if (res.data.resultCode === '100') {
+        this.cashMoney = res.data.resultContent.amount;
+        this.cumulativeIncome = res.data.resultContent.cumulativeIncome;
+        this.$apply();
+      } else {
+        utils.ErrorTips(this, res.data.detailDescription);
+      }
+    });
+    SELL.getProductList(data, res => {
+      'use strict';
+      if (res.data.resultCode === '100') {
+        this.dataList = res.data.resultContent;
+        this.pageInfo = res.data.pageInfo;
+        this.$apply();
+      } else {
+        utils.ErrorTips(this, res.data.detailDescription);
+      }
+    });
+  }
+  methods = {
+    //获取列表数据
+    getListLower: () => {
+      'use strict';
+      if (this.stop) {
+        this.stop = false;
+        let pageInfo = this.pageInfo;
+        let data = {
+          currentPage: 0,
+          pageSize: pageInfo.pageSize + 10
+        };
+        SELL.getProductList(data, res => {
+          'use strict';
+          console.log(res);
+          if (res.data.resultCode === '100') {
+            this.dataList = res.data.resultContent;
+            this.pageInfo = res.data.pageInfo;
+            this.stop = true;
+            this.$apply();
+          } else {
+            util.ErrorTips(this, res.data.detailDescription);
+          }
+        });
+      }
+    },
+    // 终止活动
+    stopActivity: goodId => {
+      'use strict';
+      if (this.stop) {
+        this.stop = false;
+        SELL.stopActivity(goodId, result => {
+          console.log(result);
+          if (result.data.resultCode === '100') {
+            let data = {
+              currentPage: 0,
+              pageSize: 10
+            };
+            SELL.getProductList(data, res => {
+              'use strict';
+              console.log(res);
+              if (res.data.resultCode === '100') {
+                this.dataList = res.data.resultContent;
+                this.pageInfo = res.data.pageInfo;
+                this.stop = true;
+                this.$apply();
+              } else {
+                util.ErrorTips(this, res.data.detailDescription);
+              }
+            });
+          }
+        });
+      }
+    },
+    //去分享
+    goShare: goodId => {
+      'use strict';
+      SELL.longToshort(goodId, res => {
+        if (res.data.resultCode === '100') {
+          let path = `/pages/sell/webView/index?scene=${
+            res.data.resultContent
+          }`;
+          utils.pageGo(path, 1);
+        }
+      });
+    },
+    // 去售后记录
+    goRecord: goodId => {
+      'use strict';
+      let path = `/pages/sell/record/index?scene=${goodId}`;
+      utils.pageGo(path, 1);
+    },
+    //提现模态
+    cashAllMoney: money => {
+      'use strict';
+      this.cashMoneyValue = money;
+      this.$apply();
+    },
+    showCash: () => {
+      this.cashMoneyValue = null;
+      this.cashStatus = true;
+    },
+    hideCash: () => {
+      this.cashStatus = false;
+    },
+    //输入提现金额
+    iptCashMoney: e => {
+      console.log(e.detail.value);
+      if (e.detail.value < this.cashMoney) {
+        this.cashMoneyValue = e.detail.value;
+      } else {
+        this.cashMoneyValue = e.detail.value;
+        utils.ErrorTips(this, '最多提现' + this.cashMoney + '元');
+      }
+    },
+    // 确认提现
+    confirmCash: e => {
+      'use strict';
+      if (this.cashMoneyValue > this.cashMoney) {
+        utils.ErrorTips(this, '最多提现' + this.cashMoney + '元');
+      } else {
+        if (this.stop) {
+          this.stop = false;
+          let dataParams = {
+            amount: this.data.cashMoneyValue,
+            appId: API.APP_ID,
+            openId: wx.getStorageSync('openid'),
+            withDrawDes: '好物来活动收入'
+          };
+          SELL.withDrawPay(dataParams, res => {
+            console.log(res);
+            if (res.data.resultCode === '100') {
+              util.successShowText('提现成功');
+              this.stop = true;
+              this.cashStatus = false;
+              this.$apply();
+              SELL.loadAccountInfo(res => {
+                'use strict';
+                console.log(res);
+                if (res.data.resultCode === '100') {
+                  this.cashMoney = res.data.resultContent.amount;
+                  this.cumulativeIncome =
+                    res.data.resultContent.cumulativeIncome;
+                  this.$apply();
+                }
+              });
+            } else {
+              this.cashStatus = false;
+              utils.ErrorTips(this, res.data.detailDescription);
+              this.$apply();
+            }
+          });
+        } else {
+          utils.ErrorTips(this, '正在处理中...');
+        }
+      }
+    }
+  };
+}
+</script>

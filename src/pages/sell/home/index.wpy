@@ -1,0 +1,213 @@
+<template>
+    <view class="sell-home">
+    <view class="sell-home-header colorA1" wx:if="{{hasUserInfo}}" @tap="showRule">
+        操作说明
+    </view>
+    <view class="sell-home-middle">
+        <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" @getuserinfo="getUserInfo">
+            <image class="sell-home-middle-img" src="/images/ic_seckill@3x.png" />
+        </button>
+        <image wx:else class="sell-home-middle-img" src="/images/ic_seckill@3x.png" @tap="pageGoSecKill"
+        />
+    </view>
+    <view class="sell-home-footer colorRed borderRed" wx:if="{{hasUserInfo}}" @tap="pageGoCash">
+        已发起活动
+    </view>
+    <view class="rule-module" wx:if="{{ruleState}}">
+        <view class="rule-module-content">
+            <view class="rule-module-content-title color4">秒杀小程序操作说明</view>
+            <view class="rule-module-content-text colorA1">
+                <view>1.可以设置线上支付或门店支付：</view>
+                <view>线上支付：客户线上支付后凭手机号到店取货，微信支付会收取0.6%手续费；</view>
+                <view>门店支付：客户线上先抢名额，再凭手机号到店付款并取货；</view>
+                <view>2.可以设置指定时间开始或立即开始；</view>
+                <view>3.可以转发活动到群里，也可以保存海报转发朋友圈；</view>
+                <view>4.在『已发布活动』中查询累积销售额，并可立即提现到个人微信账户；</view>
+                <view>5.在『已发布活动』可操作终止活动，分享活动页面，和查询购买记录。</view>
+            </view>
+            <view class="rule-module-content-btn color4" @tap="hideRule">我知道了</view>
+        </view>
+    </view>
+    <view class="ad_popError" wx:if="{{popErrorMsg}}">{{popErrorMsg}}</view>
+</view>
+</template>
+<style lang='less'>
+/* pages/sell/home/index.wxss */
+.sell-home {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.sell-home .sell-home-header {
+  position: absolute;
+  font-size: 28rpx;
+  text-decoration: underline;
+  top: 40rpx;
+  right: 40rpx;
+}
+.sell-home .sell-home-middle {
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 100%;
+  position: absolute;
+  top: 389rpx;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.sell-home .sell-home-middle button {
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 100%;
+}
+.sell-home .sell-home-middle .sell-home-middle-img {
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 100%;
+}
+.sell-home .sell-home-footer {
+  position: absolute;
+  font-size: 28rpx;
+  border-radius: 52rpx;
+  width: 300rpx;
+  height: 90rpx;
+  text-align: center;
+  line-height: 90rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 138rpx;
+}
+
+.rule-module {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+.rule-module .rule-module-content {
+  background: #fff;
+  width: 650rpx;
+  border-radius: 10rpx;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding-top: 40rpx;
+  box-sizing: border-box;
+}
+.rule-module .rule-module-content .rule-module-content-title {
+  font-size: 30rpx;
+  padding: 20rpx 40rpx;
+}
+.rule-module .rule-module-content .rule-module-content-text {
+  padding: 0 40rpx;
+  font-size: 26rpx;
+  line-height: 36rpx;
+  margin-bottom: 50rpx;
+}
+.rule-module .rule-module-content-btn {
+  border-top: 1px solid #e8e8e8;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 30rpx;
+}
+</style>
+<script>
+import wepy from 'wepy';
+import SELL from '../../../utils/sellFetch.js';
+import AuthProvider from '../../../utils/AuthProvider.js';
+import utils from '../../../utils/util.js';
+export default class Home extends wepy.page {
+  config = {
+    navigationBarTitleText: '好物来'
+  };
+  data = {
+    hasUserInfo: false, //用户授权状态
+    userInfo: null,
+    canIUse: wx.canIUse('button.open-type.getUserInfo'), //判断是否支持button微信授权
+    ruleState: false, //规则显示状态
+    popErrorMsg: null,
+    useStatus: false,
+    firstOnce: true,
+    num: 10
+  };
+  onLoad() {
+    this.$parent.getGlobalDatas(this.canIUse, res => {
+      console.log('获取用户信息');
+      this.hasUserInfo = res.hasUserInfo;
+      this.userInfo = res.userInfo;
+      this.$apply();
+    });
+  }
+  onShow() {
+    if (wepy.getStorageSync('phoneNum') && this.firstOnce) {
+      SELL.queryShopOwnerWhiteList(wepy.getStorageSync('phoneNum'), res => {
+        'use strict';
+        console.log(res);
+        if (res.data.resultCode === '100') {
+          this.firstOnce = false;
+          this.$apply();
+          if (res.data.resultContent) {
+            if (res.data.resultContent.status == 0) {
+              utils.ErrorTips(this, '您已申请试用，审核中');
+              this.useStatus = false;
+              this.$apply();
+            } else if (res.data.resultContent.status == 1) {
+              this.getToken(res => {
+                console.log(res);
+              });
+              this.useStatus = true;
+              this.$apply();
+            }
+          }
+        }
+      });
+    }
+  }
+  getToken(callback) {
+    AuthProvider.onLogin('sell', null, res => {
+      callback(res);
+    });
+  }
+  methods = {
+    showRule: () => {
+      this.ruleState = true;
+    },
+    hideRule: () => {
+      this.ruleState = false;
+    },
+    getUserInfo: function(e) {
+      this.$parent.getUserInfo(e, 'sell', res => {
+        'use strict';
+        this.hasUserInfo = res.hasUserInfo;
+        this.userInfo = res.userInfo;
+        this.$apply();
+      });
+    },
+    pageGoSecKill() {
+      'use strict';
+      if (wepy.getStorageSync('phoneNum')) {
+        if (this.useStatus) {
+          utils.pageGo('/pages/sell/secKill/index', 1);
+        } else {
+          utils.ErrorTips(this, '请耐心等待');
+        }
+      } else {
+        utils.pageGo('/pages/sell/apply/index', 1);
+      }
+    },
+    pageGoCash() {
+      'use strict';
+      if (this.useStatus) {
+        utils.pageGo('/pages/sell/withdraw/index', 1);
+      } else {
+        utils.ErrorTips(this, '请耐心等待');
+      }
+    }
+  };
+}
+</script>
+
+

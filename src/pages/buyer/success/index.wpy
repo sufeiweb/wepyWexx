@@ -1,0 +1,108 @@
+<style>
+/* pages/buyer/success/index.wxss */
+
+.success-main,
+.success {
+  width: 100%;
+  height: 100%;
+  background-color: #ff773e;
+}
+
+.success-main .order {
+  padding: 25rpx 25rpx 50rpx;
+  background: #ffffff;
+  border-radius: 10rpx;
+  width: 640rpx;
+  margin: 0 auto;
+  box-sizing: border-box;
+  transform: translateY(200rpx);
+}
+
+.success-main .order .goodImage {
+  width: 590rpx;
+  height: 590rpx;
+  margin-bottom: 30rpx;
+}
+
+.success-main .order .goodName {
+  font-family: PingFangSC-Medium;
+  font-size: 36rpx;
+  color: #444444;
+  margin-bottom: 10rpx;
+}
+
+.success-main .order .address {
+  font-family: PingFangSC-Regular;
+  font-size: 30rpx;
+  color: #444444;
+  margin-bottom: 20rpx;
+  display: flex;
+}
+
+.success-main .order .address .icon-address {
+  width: 21rpx;
+  height: 27rpx;
+  margin-right: 13rpx;
+  margin-top: 8rpx;
+  flex: none;
+}
+
+.success-main .order .address .text {
+  flex: auto;
+}
+
+.success-main .order .tip {
+  font-family: PingFangSC-Medium;
+  font-size: 32rpx;
+  color: #ff3939;
+}
+</style>
+<template>
+    <!--pages/buyer/success/index.wxml-->
+<view class="success-main">
+    <view class="success" style="background: url('https://cloud.gemii.cc/lizcloud/fs/noauth/media/5af5676c8c34ba0032eea265') no-repeat;background-size: 100%;">
+        <view class="order">
+            <view class="goodImage" style="background: url({{coverPhoto}}) no-repeat;background-size: cover;background-position: center"></view>
+            <view class="goodName">{{goodName}}</view>
+            <view class="address">
+                <image class="icon-address" src="/images/ic_location@3x.png"/>
+                <text class='text'>{{address}}</text>
+            </view>
+            <view class="tip" wx:if="{{code==8}}">*请凭手机号码到店付款并取货</view>
+            <view class="tip" wx:else>*请凭手机号码到店取货</view>
+        </view>
+    </view>
+</view>
+</template>
+<script>
+import wepy from 'wepy';
+import SELL from '../../../utils/sellFetch.js';
+import AuthProvider from '../../../utils/AuthProvider.js';
+import utils from '../../../utils/util.js';
+import API from '../../../utils/api.js';
+import wxRequest from '../../../utils/wxRequest.js';
+export default class buySuccess extends wepy.page {
+  data = {
+    address: '',
+    code: '',
+    coverPhoto: '',
+    goodName: ''
+  };
+  onLoad() {
+    let url = API.getGoodInfo;
+    let goodId = options.scene;
+    wxRequest
+      .fetch(API.getGoodInfo + '?goodId=' + goodId, null, null, 'GET')
+      .then(res => {
+        this.address =
+          res.data.resultContent.productWarehouse.bondedWarehouseName;
+        this.code = res.data.resultContent.productDescription.find(
+          item => item.type == 6
+        ).code;
+        this.coverPhoto = res.data.resultContent.coverPhoto;
+        this.goodName = res.data.resultContent.name;
+        this.$apply();
+      });
+  }
+}
+</script>
